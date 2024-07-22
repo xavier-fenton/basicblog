@@ -1,3 +1,5 @@
+// Todo: Accept my development client to be accepted via Cors policy
+
 using NSwag.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
