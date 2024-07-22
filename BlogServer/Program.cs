@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 // Services (db context) to dependency injection (DI)
 
-builder.Services.AddDbContext<TodoDb>(opt => opt.UseInMemoryDatabase("TodoList"));
+builder.Services.AddDbContext<PostDb>(opt => opt.UseInMemoryDatabase("Posts"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 //  Nswag intergration
@@ -12,8 +12,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(config =>
 {
-    config.DocumentName = "TodoAPI";
-    config.Title = "TodoAPI v1";
+    config.DocumentName = "PostAPI";
+    config.Title = "PostAPI v1";
     config.Version = "1";
 
 });
@@ -27,7 +27,7 @@ if(app.Environment.IsDevelopment())
     app.UseOpenApi();
     app.UseSwaggerUi(c =>
     {
-        c.DocumentTitle = "TodoAPI";
+        c.DocumentTitle = "PostAPI";
         c.Path = "/swagger";
         c.DocumentPath = "/swagger/{documentName}/swagger.json";
         c.DocExpansion = "list";
@@ -35,36 +35,36 @@ if(app.Environment.IsDevelopment())
 }
 
 
-app.MapGet("/todoitems", async (TodoDb db) =>
-    await db.Todos.ToListAsync());
+app.MapGet("/postItems", async (PostDb db) =>
+    await db.Posts.ToListAsync());
 
 
-app.MapGet("/todoitems/complete", async (TodoDb db) =>
-    await db.Todos.Where(t => t.IsComplete).ToListAsync());
+app.MapGet("/postItems/complete", async (PostDb db) =>
+    await db.Posts.Where(t => t.IsPublished).ToListAsync());
 
-app.MapGet("/todoitems/{id}", async (int id, TodoDb db) =>
-    await db.Todos.FindAsync(id)
-        is Todo todo
-            ? Results.Ok(todo)
+app.MapGet("/postItems/{id}", async (int id, PostDb db) =>
+    await db.Posts.FindAsync(id)
+        is Post post
+            ? Results.Ok(post)
             : Results.NotFound());
 
-app.MapPost("/todoitems", async (Todo todo, TodoDb db) => 
+app.MapPost("/postItems", async (Post post, PostDb db) => 
 {
-    db.Todos.Add(todo);
+    db.Posts.Add(post);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/todoitems/{todo.Id}", todo); 
+    return Results.Created($"/postItems/{post.Id}", post); 
 }
 );
 
-app.MapPut("/todoitems/{id}", async (int id, Todo inputTodo, TodoDb db) => 
+app.MapPut("/postItems/{id}", async (int id, Post inputPost, PostDb db) => 
 {
-    var todo = await db.Todos.FindAsync(id);
+    var post = await db.Posts.FindAsync(id);
 
-    if (todo is null) return Results.NotFound();
+    if (post is null) return Results.NotFound();
 
-    todo.Name = inputTodo.Name;
-    todo.IsComplete = inputTodo.IsComplete;
+    post.Title = inputPost.Title;
+    post.IsPublished = inputPost.IsPublished;
 
     await db.SaveChangesAsync();
 
