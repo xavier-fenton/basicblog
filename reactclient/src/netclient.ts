@@ -1,4 +1,4 @@
-
+// Todo: add rest of crud ops endpoints
 
 export const fetchPosts = async () => {
     try{
