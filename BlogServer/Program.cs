@@ -1,6 +1,8 @@
 using NSwag.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
+
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 // Services (db context) to dependency injection (DI)
 
@@ -18,6 +20,16 @@ builder.Services.AddOpenApiDocument(config =>
 
 });
 
+builder.Services.AddCors(options => 
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+    policy => 
+    {
+        policy.WithOrigins("http://localhost:3000");
+    });
+});
+
+
 
 var app = builder.Build();
 
@@ -34,6 +46,8 @@ if(app.Environment.IsDevelopment())
         c.DocExpansion = "list";
     });
 }
+
+app.UseCors();
 
 app.MapGet("/", () => "Welcome to the Blogs apis refer to the docs for usage.");
 
