@@ -4,7 +4,7 @@ using NSwag.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 
-var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 // Services (db context) to dependency injection (DI)
 
@@ -22,12 +22,13 @@ builder.Services.AddOpenApiDocument(config =>
 
 });
 
-builder.Services.AddCors(options => 
+builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
-    policy => 
+    policy =>
     {
-        policy.WithOrigins("http://localhost:3000");
+        policy.WithOrigins("http://localhost:3000").AllowAnyMethod()
+                       .AllowAnyHeader(); ;
     });
 });
 
@@ -37,7 +38,7 @@ var app = builder.Build();
 
 
 // Nswag for Development mode
-if(app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi();
     app.UseSwaggerUi(c =>
@@ -49,7 +50,7 @@ if(app.Environment.IsDevelopment())
     });
 }
 
-app.UseCors();
+app.UseCors(MyAllowSpecificOrigins);
 
 app.MapGet("/", () => "Welcome to the Blogs apis refer to the docs for usage.");
 
@@ -66,16 +67,16 @@ app.MapGet("/postItems/{id}", async (int id, PostDb db) =>
             ? Results.Ok(post)
             : Results.NotFound());
 
-app.MapPost("/postItems", async (Post post, PostDb db) => 
+app.MapPost("/postItems", async (Post post, PostDb db) =>
 {
     db.Posts.Add(post);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/postItems/{post.Id}", post); 
+    return Results.Created($"/postItems/{post.Id}", post);
 }
 );
 
-app.MapPut("/postItems/{id}", async (int id, Post inputPost, PostDb db) => 
+app.MapPut("/postItems/{id}", async (int id, Post inputPost, PostDb db) =>
 {
     var post = await db.Posts.FindAsync(id);
 
