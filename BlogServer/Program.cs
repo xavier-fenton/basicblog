@@ -21,6 +21,7 @@ builder.Services.AddOpenApiDocument(config =>
 
 var app = builder.Build();
 
+
 // Nswag for Development mode
 if(app.Environment.IsDevelopment())
 {
@@ -34,6 +35,7 @@ if(app.Environment.IsDevelopment())
     });
 }
 
+app.MapGet("/", () => "Welcome to the Blogs apis refer to the docs for usage.");
 
 app.MapGet("/postItems", async (PostDb db) =>
     await db.Posts.ToListAsync());
