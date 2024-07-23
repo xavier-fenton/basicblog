@@ -1,4 +1,5 @@
-// Todo: Accept my development client to be accepted via Cors policy
+// Todo: Understand why dbContext doesn't persist some sort of dummy data set up
+//       - fix: Data doesnt refresh, if I delete data with id: 1, my next entry is created with an incrementing id still
 
 using NSwag.AspNetCore;
 using Microsoft.EntityFrameworkCore;
@@ -90,6 +91,26 @@ app.MapPut("/postItems/{id}", async (int id, Post inputPost, PostDb db) =>
     return Results.NoContent();
 }
 );
+
+// Identify id
+// is given id matching to post.id in DB? 
+// Remove and then db.SaveChangesAsync(); To remove given id from db
+
+app.MapDelete("/postItems/{id}", async (int id, PostDb db) => 
+{
+
+    if(await db.Posts.FindAsync(id) is Post post)
+    { 
+        db.Posts.Remove(post);
+        await db.SaveChangesAsync();
+        return Results.NoContent();
+            
+    };
+    return Results.NotFound();
+
+}
+);
+
 
 
 app.Run();
