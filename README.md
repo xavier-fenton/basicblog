@@ -68,7 +68,7 @@ Create a better developer experience for running this project locally.
 ### Notes from today: Date: 24/07/24
 #### Where to start..
  <strong>
- <p>Since I am using this as a code-first learning approach. Coming from a background using JavaScript, TypeScript and programming in a NodeJS enviroment.</p>
+ <p>Since I am using this as a code-first learning approach and coming from a background programming in NodeJS enviroments.</p>
 <p>The idea of architecture for an application similar to this, was fine too understand but translating it into a new language, and it being my third day learning and writing Csharp.</p>
 <p>
 Today I wanted to change over the database to something I was familar with which is PostgreSQL. As the built in memory from asp.net didn't seem good to use. Especially for persistance of data. And it is only reccomended to use the built in memory for 1 time uses only, where with a blog and posting, posts are suppose to stay until it's removed.
