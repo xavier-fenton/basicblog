@@ -1,8 +1,10 @@
+// I have a naming violation here but will fix later
+
 public class Post
 {
-    public int Id { get; set;}
-    public string? Title { get; set;}
-    public bool IsPublished {get; set;}
+    public int id { get; set;}
+    public string? title { get; set;}
+    public bool is_published {get; set;}
 
-    public string? Body {get; set;}        
+    public string? body {get; set;}        
 }

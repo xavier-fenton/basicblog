@@ -1,19 +1,16 @@
-// Todo: Understand why dbContext doesn't persist some sort of dummy data set up
-//       - fix: Data doesnt refresh, if I delete data with id: 1, my next entry is created with an incrementing id still
-
-using NSwag.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
-// Services (db context) to dependency injection (DI)
+var Configuration = builder.Configuration;
 
-builder.Services.AddDbContext<PostDb>(opt => opt.UseInMemoryDatabase("Posts"));
+builder.Services.AddDbContext<PostDb>(opt => opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Logging.AddConsole();
 
-//  Nswag intergration
-// metadata about http api
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(config =>
 {
@@ -30,6 +27,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:3000").AllowAnyMethod()
                        .AllowAnyHeader(); ;
+
     });
 });
 
@@ -55,12 +53,14 @@ app.UseCors(MyAllowSpecificOrigins);
 
 app.MapGet("/", () => "Welcome to the Blogs apis refer to the docs for usage.");
 
+// Query the postgres server after each end point
+
 app.MapGet("/postItems", async (PostDb db) =>
     await db.Posts.ToListAsync());
 
 
 app.MapGet("/postItems/complete", async (PostDb db) =>
-    await db.Posts.Where(t => t.IsPublished).ToListAsync());
+    await db.Posts.Where(t => t.is_published).ToListAsync());
 
 app.MapGet("/postItems/{id}", async (int id, PostDb db) =>
     await db.Posts.FindAsync(id)
@@ -73,7 +73,7 @@ app.MapPost("/postItems", async (Post post, PostDb db) =>
     db.Posts.Add(post);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/postItems/{post.Id}", post);
+    return Results.Created($"/postItems/{post.id}", post);
 }
 );
 
@@ -83,8 +83,8 @@ app.MapPut("/postItems/{id}", async (int id, Post inputPost, PostDb db) =>
 
     if (post is null) return Results.NotFound();
 
-    post.Title = inputPost.Title;
-    post.IsPublished = inputPost.IsPublished;
+    post.title = inputPost.title;
+    post.is_published = inputPost.is_published;
 
     await db.SaveChangesAsync();
 
@@ -92,9 +92,7 @@ app.MapPut("/postItems/{id}", async (int id, Post inputPost, PostDb db) =>
 }
 );
 
-// Identify id
-// is given id matching to post.id in DB? 
-// Remove and then db.SaveChangesAsync(); To remove given id from db
+// if existing id is deleted, a new entry is still reading as if the deleted id is there. eg: id: 2 (deleted) new entry afterwards has id: 3, i'd expect it's id to be = 2
 
 app.MapDelete("/postItems/{id}", async (int id, PostDb db) => 
 {
