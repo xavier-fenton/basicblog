@@ -33,7 +33,7 @@ Alternatively we can run the dotnet cmds assuming you've installed the packages 
 ```bash
 dotnet ....
 ```
-3. npm start in React directory. Assuming you are
+3. npm start in React directory. Assuming you are experienced with React development
 
 ```bash
 npm run start
