@@ -43,4 +43,4 @@ Create a better developer experience for running this project locally.
 
 # Production
 
-I may push containerize this whole project and push up to dockerhub and host it there.
+I may push too containerize this whole project and push up to dockerhub and host it from there.
