@@ -6,4 +6,11 @@ class PostDb : DbContext
         : base(options) { }
 
     public DbSet<Post> Posts => Set<Post>();
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+    {
+
+        modelBuilder.Entity<Post>().ToTable("blog_test");
+
+    }
 }
