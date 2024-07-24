@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  blog_database:
+    image: postgres:16.1
+    restart: always
+    shm_size: 128mb
+    volumes: 
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: blogdb
+    ports:
+      - 5432:80
+    networks:
+      - blog-local
+      
+  user_interface:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - blog-local
+
+volumes:
+  database:
+    driver: local
+
+networks:
+  blog-local:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+          ip_range: 172.28.5.0/24
+          gateway: 172.28.5.254
+          aux_addresses:
+            host1: 172.28.1.5
+            host2: 172.28.1.6
+            host3: 172.28.1.7
