@@ -4,7 +4,8 @@ CREATE TABLE blog_test (
   id SERIAL NOT NULL PRIMARY KEY,
   title VARCHAR(150) NOT NULL,
   body VARCHAR(500),
-  is_published BOOLEAN DEFAULT false
+  is_published BOOLEAN DEFAULT false,
+  date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO blog_test (title, body)
