@@ -56,7 +56,24 @@ app.MapGet("/", () => "Welcome to the Blogs apis refer to the docs for usage.");
 // Query the postgres server after each end point
 
 app.MapGet("/postItems", async (PostDb db) =>
-    await db.Posts.ToListAsync());
+{
+    var posts = await db.Posts.ToListAsync();
+    var result = posts.Select(post => 
+    {
+    var  date_created = post.date_created.ToString();
+        return   new Post
+        {
+            id = post.id,
+            title = post.title,
+            body = post.body,
+            is_published = post.is_published,
+            date_created = post.date_created
+        };
+    }
+    );
+
+    return Results.Ok(result);
+});
 
 
 app.MapGet("/postItems/complete", async (PostDb db) =>

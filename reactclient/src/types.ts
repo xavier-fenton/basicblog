@@ -3,5 +3,5 @@ export type BlogPost = {
     title: string,
     isPublish: boolean,
     body: string
-  
+    date_created: string
   }
