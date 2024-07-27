@@ -14,10 +14,7 @@ export default function BlogPosts() {
       setBlogData(data)
     }
   }, [])
-
-  console.log(blogData);
   
-
 
   return (
     <div className='flex flex-col gap-[5px] justify-center items-center'>
@@ -27,6 +24,12 @@ export default function BlogPosts() {
             <div><img src='/images/example.jpg'/></div>
             <div className='text-[12px]'>{blogPost.title}</div>
             <div className='text-[10px]'>{blogPost.body}</div>
+            {
+              blogPost.date_created ? <div className='text-[8px]'>{blogPost.date_created}</div> : null
+            }
+            
+
+            
           </div>
         )
       }) : <div>No Blog Posts</div>}
