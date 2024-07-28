@@ -61,6 +61,34 @@ I may push too containerize this whole project and push up to dockerhub and host
 </br>
 </br>
 
+## Useful Commands to run if you recieve errors according to usecase:
+
+**When running docker compose up**
+
+If any docker container errors
+```bash
+# Try composing down and remove orphans
+
+docker compose down --remove-orphans
+```
+On start up and this Error shows:
+
+```bash
+basicblog-user_interface-1  |  |[Sun Jul 28 04:02:41 2024] PHP 7.4.33 Development Server (http://[::]:8080) started
+Error response from daemon: driver failed programming external connectivity on endpoint basicblog-blog_database-1 (2a4901e836a386aa29ca9c3dd6684e4f4cdf7aeff9d468303eb1b6179736e67d): Error starting userland proxy: listen tcp4 0.0.0.0:5432: bind: address already in use
+```
+
+```bash
+# Sometimes you can't see the port so running this commands shows the attached pid
+
+sudo ss -lptn 'sport = :5432'
+
+# Find pid attached and kill
+
+kill <pid>
+
+```
+
 ## Notes while developing
 Create a better developer experience for running this project locally.
 </br>
