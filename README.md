@@ -25,13 +25,15 @@ docker compose up
 <strong>2. Use the built-in VS-Code feature `Run and Debug` when running server.</strong>
   </br>
   </br>
-Alternatively we can run the dotnet cmds assuming you've installed the packages according to your OS.
+Alternatively we can run the dotnet commands assuming you've installed the packages according to your OS.
   </br>
 
-<i><strong>(dotnet cmd coming soon)</strong></i>
+**Make sure you're in the BlogServer directory**
 
 ```bash
-dotnet ....
+dotnet build
+
+dotnet run
 ```
 
 <strong>3. npm start in React directory. Assuming you are experienced with React development.</strong>
