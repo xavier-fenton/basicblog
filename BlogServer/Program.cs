@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -96,12 +97,15 @@ app.MapPost("/postItems", async (Post post, PostDb db) =>
 
 app.MapPut("/postItems/{id}", async (int id, Post inputPost, PostDb db) =>
 {
+    // debugging
+    Debug.WriteLine(id);
+
     var post = await db.Posts.FindAsync(id);
 
     if (post is null) return Results.NotFound();
 
     post.title = inputPost.title;
-    post.is_published = inputPost.is_published;
+    post.body = inputPost.body;
 
     await db.SaveChangesAsync();
 
