@@ -1,5 +1,7 @@
 // Todo: add rest of crud ops endpoints
 
+import { BlogPost } from "./types"
+
 export const fetchPosts = async () => {
     try{
         const response = await fetch("http://localhost:5169/postItems", {method: "GET", mode: "cors"})
@@ -11,3 +13,15 @@ export const fetchPosts = async () => {
     }
 } 
 
+export const updatePost = async (blogPost: BodyInit) => {
+    try{
+        
+        const request = await fetch(`http://localhost:5169/postItems/${blogPost.id}`, {method: "PUT", body: JSON.stringify(blogPost), headers: {
+            'Content-Type': 'application/json',
+          }})
+        const success = request.ok      
+        return success;  
+    } catch (error){
+        throw new Error('Something went wrong. Please try again later.')
+    }
+} 
