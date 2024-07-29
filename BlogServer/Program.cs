@@ -86,6 +86,8 @@ app.MapGet("/postItems/{id}", async (int id, PostDb db) =>
             ? Results.Ok(post)
             : Results.NotFound());
 
+
+// Todo: Bug:Date Created doesn't work but updateTime sets itself
 app.MapPost("/postItems", async (Post post, PostDb db) =>
 {
     db.Posts.Add(post);
