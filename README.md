@@ -85,7 +85,7 @@ sudo ss -lptn 'sport = :5432'
 
 # Find pid attached and kill
 
-kill <pid>
+sudo kill <pid>
 
 ```
 
